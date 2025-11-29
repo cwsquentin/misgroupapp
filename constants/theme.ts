@@ -5,11 +5,11 @@
 
 import { Platform } from 'react-native';
 
-const brand = '#2f6df2';
-const background = '#f5f6fb';
+const brand = '#2458e8';
+const background = '#eaf0ff';
 const text = '#0f172a';
-const icon = '#5f6c7b';
-const tabDefault = '#9aa3b1';
+const icon = '#4b5563';
+const tabDefault = '#8b95a6';
 
 export const Colors = {
   light: {

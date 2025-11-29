@@ -1,23 +1,23 @@
-import { useMemo, useState } from 'react';
-import { Button, FlatList, StyleSheet, TextInput, View } from 'react-native';
+import { useState } from 'react';
+import { Button, FlatList, StatusBar, StyleSheet, TextInput, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
-const ACCENT = '#2f6df2';
+const ACCENT = '#2458e8';
 const CARD = '#ffffff';
-const BORDER = '#d8dde6';
+const BORDER = '#c6d0eb';
+const TITLE_COLOR = '#d7263d';
+const BADGE_BG = '#e4e9fb';
 
 export default function HomeScreen() {
   const [inputValue, setInputValue] = useState('');
   const [names, setNames] = useState<string[]>([]);
 
-  const reversedNames = useMemo(() => names, [names]);
-
   const handleAdd = () => {
     const nextName = inputValue.trim();
     if (!nextName) return;
-    setNames((prev) => [nextName, ...prev]);
+    setNames((prev) => [...prev, nextName]);
     setInputValue('');
   };
 
@@ -25,16 +25,15 @@ export default function HomeScreen() {
     <ThemedView style={styles.container}>
       <ThemedView style={styles.hero}>
         <ThemedText type="title" style={styles.title}>
-          Carnet de prenoms
+          SUPER PRÉNOMS APP X3000
         </ThemedText>
-        <ThemedText style={styles.subtitle}>Ajoute, garde, reconsulte sans effort.</ThemedText>
       </ThemedView>
 
       <View style={styles.form}>
         <TextInput
           value={inputValue}
           onChangeText={setInputValue}
-          placeholder="Entrez un prenom"
+          placeholder="Entrez un prénom"
           placeholderTextColor="#94a3b8"
           style={styles.input}
           returnKeyType="done"
@@ -46,10 +45,10 @@ export default function HomeScreen() {
 
       <ThemedView style={styles.card}>
         <ThemedText type="subtitle" style={styles.cardTitle}>
-          Prenoms ajoutes
+          Prénoms ajoutés
         </ThemedText>
         <FlatList
-          data={reversedNames}
+          data={names}
           keyExtractor={(item, index) => `${item}-${index}`}
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={names.length === 0 ? styles.emptyList : styles.listContent}
@@ -65,7 +64,7 @@ export default function HomeScreen() {
           )}
           ListEmptyComponent={
             <ThemedText type="defaultSemiBold" style={styles.emptyText}>
-              Aucun prenom ajoute pour le moment.
+              Aucun prénom ajouté pour le moment.
             </ThemedText>
           }
         />
@@ -78,16 +77,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
+    paddingTop: (StatusBar.currentHeight ?? 0) + 24,
     gap: 18,
   },
   hero: {
     gap: 4,
   },
   title: {
+    color: TITLE_COLOR,
     letterSpacing: 0.5,
-  },
-  subtitle: {
-    color: '#6b7280',
   },
   form: {
     flexDirection: 'row',
@@ -131,12 +129,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: BORDER,
     borderRadius: 12,
+    backgroundColor: '#f8f9ff',
   },
   indexBadge: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#e7ecf6',
+    backgroundColor: BADGE_BG,
     alignItems: 'center',
     justifyContent: 'center',
   },
