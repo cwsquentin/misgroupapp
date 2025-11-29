@@ -1,98 +1,158 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useMemo, useState } from 'react';
+import { Button, FlatList, StyleSheet, TextInput, View } from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+
+const ACCENT = '#2f6df2';
+const CARD = '#ffffff';
+const BORDER = '#d8dde6';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const [inputValue, setInputValue] = useState('');
+  const [names, setNames] = useState<string[]>([]);
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
+  const reversedNames = useMemo(() => names, [names]);
+
+  const handleAdd = () => {
+    const nextName = inputValue.trim();
+    if (!nextName) return;
+    setNames((prev) => [nextName, ...prev]);
+    setInputValue('');
+  };
+
+  return (
+    <ThemedView style={styles.container}>
+      <ThemedView style={styles.hero}>
+        <ThemedText type="title" style={styles.title}>
+          Carnet de prenoms
         </ThemedText>
+        <ThemedText style={styles.subtitle}>Ajoute, garde, reconsulte sans effort.</ThemedText>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
+
+      <View style={styles.form}>
+        <TextInput
+          value={inputValue}
+          onChangeText={setInputValue}
+          placeholder="Entrez un prenom"
+          placeholderTextColor="#94a3b8"
+          style={styles.input}
+          returnKeyType="done"
+          onSubmitEditing={handleAdd}
+          autoCapitalize="words"
+        />
+        <Button title="Ajouter" onPress={handleAdd} color={ACCENT} />
+      </View>
+
+      <ThemedView style={styles.card}>
+        <ThemedText type="subtitle" style={styles.cardTitle}>
+          Prenoms ajoutes
         </ThemedText>
+        <FlatList
+          data={reversedNames}
+          keyExtractor={(item, index) => `${item}-${index}`}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={names.length === 0 ? styles.emptyList : styles.listContent}
+          renderItem={({ item, index }) => (
+            <View style={styles.listItem}>
+              <View style={styles.indexBadge}>
+                <ThemedText type="defaultSemiBold" style={styles.indexText}>
+                  {index + 1}
+                </ThemedText>
+              </View>
+              <ThemedText style={styles.nameText}>{item}</ThemedText>
+            </View>
+          )}
+          ListEmptyComponent={
+            <ThemedText type="defaultSemiBold" style={styles.emptyText}>
+              Aucun prenom ajoute pour le moment.
+            </ThemedText>
+          }
+        />
       </ThemedView>
-    </ParallaxScrollView>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+    padding: 24,
+    gap: 18,
+  },
+  hero: {
+    gap: 4,
+  },
+  title: {
+    letterSpacing: 0.5,
+  },
+  subtitle: {
+    color: '#6b7280',
+  },
+  form: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 12,
   },
-  stepContainer: {
-    gap: 8,
+  input: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: BORDER,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    backgroundColor: CARD,
+    fontSize: 16,
+  },
+  card: {
+    flex: 1,
+    backgroundColor: CARD,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: BORDER,
+    padding: 16,
+    shadowColor: '#111827',
+    shadowOpacity: 0.06,
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 12,
+    elevation: 3,
+  },
+  cardTitle: {
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  listContent: {
+    gap: 10,
+  },
+  listItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: BORDER,
+    borderRadius: 12,
+  },
+  indexBadge: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#e7ecf6',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  indexText: {
+    color: ACCENT,
+  },
+  nameText: {
+    fontSize: 16,
+  },
+  emptyList: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 40,
+  },
+  emptyText: {
+    color: '#6b7280',
   },
 });
