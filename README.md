@@ -1,7 +1,8 @@
 # Prenoms App – MIS Group
 
 Welcome to the Super Prenoms App x3000 !
-This projet was made for MIS Group as part of a technical test.
+
+This projet was made for MIS Groupe as part of a technical test.
 
 ## 🛠️ Technologies Used
 
