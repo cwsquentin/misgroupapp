@@ -7,7 +7,7 @@ This projet was made for MIS Groupe as part of a technical test.
 
 <p align="left">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript" width="40" height="40"/>
-  <img src="https://raw.githubusercontent.com/expo/expo/main/.github/assets/expo-go-icon.png" alt="Expo Go" width="40" height="40"/>
+  <img src="https://docs.expo.dev/static/images/brand/expo-go-icon.png" alt="Expo Go" width="40" height="40"/>
 </p>
 
 
