@@ -12,12 +12,12 @@ export default function RootLayout() {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: '#f5f6fb',
-      card: '#f5f6fb',
-      primary: '#2f6df2',
+      background: '#eaf0ff',
+      card: '#eaf0ff',
+      primary: '#2458e8',
       text: '#0f172a',
-      border: '#d8dde6',
-      notification: '#2f6df2',
+      border: '#c6d0eb',
+      notification: '#2458e8',
     },
   };
 
