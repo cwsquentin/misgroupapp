@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, FlatList, StatusBar, StyleSheet, TextInput, View } from 'react-native';
+import { Button, FlatList, Pressable, StatusBar, StyleSheet, TextInput, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -19,6 +19,10 @@ export default function HomeScreen() {
     if (!nextName) return;
     setNames((prev) => [...prev, nextName]);
     setInputValue('');
+  };
+
+  const handleRemove = (indexToRemove: number) => {
+    setNames((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
   return (
@@ -59,7 +63,19 @@ export default function HomeScreen() {
                   {index + 1}
                 </ThemedText>
               </View>
-              <ThemedText style={styles.nameText}>{item}</ThemedText>
+              <ThemedText style={styles.nameText} numberOfLines={1}>
+                {item}
+              </ThemedText>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`Supprimer ${item}`}
+                hitSlop={8}
+                style={styles.deleteButton}
+                onPress={() => handleRemove(index)}>
+                <ThemedText type="defaultSemiBold" style={styles.deleteText}>
+                  ×
+                </ThemedText>
+              </Pressable>
             </View>
           )}
           ListEmptyComponent={
@@ -144,6 +160,21 @@ const styles = StyleSheet.create({
   },
   nameText: {
     fontSize: 16,
+    flex: 1,
+  },
+  deleteButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: BORDER,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+  },
+  deleteText: {
+    color: '#d7263d',
+    fontSize: 18,
   },
   emptyList: {
     flexGrow: 1,
