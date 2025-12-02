@@ -15,8 +15,8 @@ This projet was made for MIS Group as part of a technical test.
 ## ⚙️ How to Setup
 
 ```bash
-git clone https://github.com/cwsquentin/prenoms-app-misgroup.git
-cd prenoms-app-misgroup
+git clone https://github.com/cwsquentin/misgroupapp.git
+cd misgroupapp
 npm install
 npm run start
 ```
